@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Movies</title>
+
+</head>
+<body ng-app="app" ng-controller="home">
+<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+<script type="text/javascript">
+  angular.module("app", []).controller("home", function($scope,$http) {
+    $http.get("http://127.0.0.1:8080/movie/").then(function(response) {
+        $scope.movies=response.data;
+      ;
+    });
+  });
+</script>
+<h3 align="center">Hello, <span th:text="${facebookProfile.name}"></span></h3>
+<h2 align="center">Movies</h2>
+<table align="center">
+    <tr ng-repeat="movie in movies">
+        <td>{{movie}}</td>
+    </tr>
+</table>
+
+</body>
+</html>
