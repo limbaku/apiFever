@@ -19,7 +19,6 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
-    @CrossOrigin
     @RequestMapping(path = "/movie", method = RequestMethod.GET)
     public ResponseEntity<List> getAllMovies(){
         return new ResponseEntity<>(movieService.findAllMovies(), HttpStatus.OK);

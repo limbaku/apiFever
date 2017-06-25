@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Movies</title>
+
+</head>
+<body>
+<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+<script type="text/javascript">
+  angular.module("movieListApp", []).controller("movieListController", function($scope,$http) {
+    $scope.container=true;
+    $http.get("http://localhost:8080/movie/").then(function(response) {
+        $scope.movies=response.data;
+        $scope.movieList=true;
+        $scope.container=false;
+    });
+  });
+  angular.module("logoutApp", []).controller("logoutController", function($http, $location) {
+    var self = this;
+    $http.get("/user").success(function(data) {
+        self.user = data.userAuthentication.details.name;
+        self.authenticated = true;
+    }).error(function() {
+        self.user = "N/A";
+        self.authenticated = false;
+    });
+    self.logout = function() {
+        $http.post('/logout', {}).success(function() {
+            self.authenticated = false;
+            $location.path("/");
+        }).error(function(data) {
+            console.log("Logout failed")
+            self.authenticated = false;
+        });
+    };
+  });
+</script>
+<div align="center" ng-show="container">
+    Login with: <a href="/login">Facebook</a>
+</div>
+<div align="center" ng-show="movieList" ng-app="movieListApp" ng-controller="movieListController">
+<h2>Movies</h2>
+<table align="center">
+    <tr ng-repeat="movie in movies">
+        <td>{{movie}}</td>
+    </tr>
+</table>
+</div>
+<div ng-app="logoutApp" ng-controller="logoutController">
+    <button ng-click="logoutController.logout()" class="btn btn-primary">Logout</button>
+</div>
+
+</body>
+</html>
